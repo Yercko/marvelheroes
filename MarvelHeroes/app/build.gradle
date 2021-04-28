@@ -1,0 +1,105 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        applicationId "com.example.marvelheroes"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    flavorDimensions "environment"
+    productFlavors {
+        def BASE_ENDPOINT = "BASE_ENDPOINT"
+        def PUBLIC_KEY = "PUBLIC_KEY"
+        def PRIVATE_KEY = "PRIVATE_KEY"
+        dev {
+            buildConfigField "String", BASE_ENDPOINT, '"https://gateway.marvel.com/"'
+            buildConfigField "String", PUBLIC_KEY, '"9a0d6807e69174d4c0459b3bedb00eeb"'
+            buildConfigField "String", PRIVATE_KEY, '"8e8a07fb2b9b248993bef803a59ca8b02e4ebed3"'
+
+            dimension "environment"
+        }
+        pro {
+            buildConfigField "String", BASE_ENDPOINT, '"https://gateway.marvel.com/v1/public/"'
+            dimension "environment"
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    viewBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    def koin_version = "2.0.1"
+    def retrofit_version = "2.9.0"
+    def okHttpLogginInterceptor = "4.9.0"
+    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    //GOOGLE ANDROID
+    implementation 'com.google.android.material:material:1.3.0'
+
+    //ANDROID X
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+    //LIFECYCLE
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+    kapt "android.arch.lifecycle:compiler:1.0.0"
+
+    //KOIN
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+
+    //COROUTINES
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
+    //retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpLogginInterceptor"
+
+    //glide
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation 'io.mockk:mockk:1.9.3'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.2'
+    testImplementation 'android.arch.core:core-testing:1.1.1'
+
+
+}
